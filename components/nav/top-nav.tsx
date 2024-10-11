@@ -18,7 +18,7 @@ export default function TopNav() {
 			<div className="flex items-center">
 				{isSignedIn && (
 					<Link className="mr-2" href="/dashboard">
-						{`${user.fullName}`}'s Dashboard
+						{`${user.fullName}'s`} Dashboard
 					</Link>
 				)}
 				<SignedOut>
