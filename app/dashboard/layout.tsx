@@ -11,14 +11,7 @@ export default function DashboardLayout({
 			<div className="col-span-1">
 				<SideNav />
 			</div>
-			<div className="col-span-3">
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Non
-					aut minus impedit, magni eos animi maxime pariatur quos
-					vitae, ea unde quidem. Aperiam maxime optio, nesciunt fugiat
-					ad autem alias?
-				</p>
-			</div>
+			<div className="col-span-3">{children}</div>
 		</div>
 	);
 }
