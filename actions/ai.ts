@@ -20,13 +20,13 @@ let chatSession: any;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function runAi(text: string) {
-	// const chatSession = model.startChat({
-	// 	generationConfig,
-	// 	// safetySettings: Adjust safety settings
-	// 	// See https://ai.google.dev/gemini-api/docs/safety-settings
-	// 	history: [],
-	// });
-
+	chatSession = model.startChat({
+		generationConfig,
+		// safetySettings: Adjust safety settings
+		// See https://ai.google.dev/gemini-api/docs/safety-settings
+		history: [],
+	});
+	console.log('runAI', text);
 	const result = await chatSession.sendMessage(text);
 	return result.response.text();
 }

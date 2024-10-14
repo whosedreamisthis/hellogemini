@@ -46,15 +46,17 @@ export default function Page() {
 					<h1>AI response</h1>
 				</CardHeader>
 				<CardContent>
-					<ReactMarkdown>
-						{/* {loading ? (
+					{/* {loading ? (
 							<div>Loading...</div>
 						) : (
 							
 						)} */}
 
-						{loading ? 'Loading...' : response}
-					</ReactMarkdown>
+					{loading ? (
+						<div>Loading...</div>
+					) : (
+						<ReactMarkdown>{response}</ReactMarkdown>
+					)}
 				</CardContent>
 			</Card>
 			{/* <Button onClick={handleClick}>Run AI</Button>
