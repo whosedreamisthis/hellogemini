@@ -34,7 +34,6 @@ export default function SideNav() {
 		},
 	];
 
-	console.log(path);
 	return (
 		<div className="h-screen p-5 shadow-sm border">
 			{menu.map((item, index) => (

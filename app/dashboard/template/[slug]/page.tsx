@@ -32,7 +32,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 	const [content, setContent] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { user } = useUser();
-	console.log('useUser in slug page', user);
 	const email = user?.primaryEmailAddress?.emailAddress || '';
 
 	const t = template.find((item) => item.slug === params.slug) as Template;
@@ -51,8 +50,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 		} finally {
 			setLoading(false);
 		}
-
-		console.log('submitted');
 	};
 
 	const handleChange = (
@@ -61,7 +58,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 			| React.ChangeEvent<HTMLTextAreaElement>
 	) => {
 		e.preventDefault();
-		console.log(e.target.value);
 	};
 	// return <div>{JSON.stringify(params)}</div>;
 	return (

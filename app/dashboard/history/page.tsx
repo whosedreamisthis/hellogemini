@@ -36,6 +36,7 @@ export default function Page() {
 				page,
 				perPage
 			)) as QueryResponse;
+			console.log('fetch ', res.queries);
 			setQueries(res.queries);
 			setTotalPages(res.totalPages);
 		} catch (err) {
@@ -54,6 +55,8 @@ export default function Page() {
 				perPage
 			)) as QueryResponse;
 			setQueries([...queries, ...res.queries]);
+			console.log('load more queries ', queries);
+			console.log('load mroe res queries ', res.queries);
 			setTotalPages(res.totalPages);
 		} catch (err) {
 			console.log(err);

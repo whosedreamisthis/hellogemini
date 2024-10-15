@@ -27,7 +27,6 @@ export async function runAi(text: string) {
 		// See https://ai.google.dev/gemini-api/docs/safety-settings
 		history: [],
 	});
-	console.log('runAI', text);
 	const result = await chatSession.sendMessage(text);
 	return result.response.text();
 }
@@ -54,6 +53,7 @@ export async function saveQuery(
 }
 
 export async function initAi() {
+	console.log('1 ai.ts initAi ');
 	chatSession = model.startChat({
 		generationConfig,
 		// safetySettings: Adjust safety settings
@@ -68,16 +68,16 @@ export async function getQueries(
 	pageSize: number
 ) {
 	try {
+		console.log('1 ai.ts queries ');
+
 		await db();
 
 		const skip = (page - 1) * pageSize;
 		const totalQueries = await Query.countDocuments({ email });
 
-		const queries = await Query.find({ email })
-			.skip(skip)
-			.limit(pageSize)
-			.sort({ createAt: -1 });
-
+		const queries = await Query.find({ email }).skip(skip).limit(pageSize);
+		//.sort({ createAt: -1 });
+		console.log('ai.ts queries ', queries);
 		return {
 			queries,
 			totalPages: Math.ceil(totalQueries / pageSize),
@@ -86,5 +86,6 @@ export async function getQueries(
 		return {
 			ok: false,
 		};
+		console.log('ERRRR ', err);
 	}
 }
