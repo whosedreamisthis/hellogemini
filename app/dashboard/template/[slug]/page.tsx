@@ -11,6 +11,9 @@ import { runAi } from '@/actions/ai';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
 import ReactMarkdown from 'react-markdown';
+import { saveQuery } from '@/actions/ai';
+import { useUser } from '@clerk/nextjs';
+import { Template } from '@/utils/types';
 const Markdown = ({ content }: { content: string }) => {
 	return (
 		<div className="prose max-w-none">
@@ -23,26 +26,15 @@ const Markdown = ({ content }: { content: string }) => {
 		</div>
 	);
 };
-export interface Template {
-	name: string;
-	slug: string;
-	icon: string;
-	desc: string;
-	category: string;
-	aiPrompt: string;
-	form: Form[];
-}
 
-export interface Form {
-	label: string;
-	field: string;
-	name: string;
-	required: boolean;
-}
 export default function Page({ params }: { params: { slug: string } }) {
 	const [query, setQuery] = useState('');
 	const [content, setContent] = useState('');
 	const [loading, setLoading] = useState(false);
+	const { user } = useUser();
+	console.log('useUser in slug page', user);
+	const email = user?.primaryEmailAddress?.emailAddress || '';
+
 	const t = template.find((item) => item.slug === params.slug) as Template;
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,6 +44,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 			const data = await runAi(t.aiPrompt + query);
 
 			setContent(data);
+			await saveQuery(t, email, query, data);
 		} catch (err) {
 			setContent('An Error has occurred. Please try again.');
 			console.log(err);

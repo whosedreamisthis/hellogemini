@@ -1,6 +1,7 @@
 'use server';
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-
+import db from '@/utils/db';
+import Query from '@/models/query';
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -31,6 +32,27 @@ export async function runAi(text: string) {
 	return result.response.text();
 }
 
+export async function saveQuery(
+	template: Object,
+	email: string,
+	query: string,
+	content: string
+) {
+	try {
+		await db();
+		const newQuery = new Query({ template, email, query, content });
+
+		await newQuery.save();
+		return {
+			ok: true,
+		};
+	} catch (err) {
+		return {
+			ok: false,
+		};
+	}
+}
+
 export async function initAi() {
 	chatSession = model.startChat({
 		generationConfig,
@@ -38,4 +60,31 @@ export async function initAi() {
 		// See https://ai.google.dev/gemini-api/docs/safety-settings
 		history: [],
 	});
+}
+
+export async function getQueries(
+	email: string,
+	page: number,
+	pageSize: number
+) {
+	try {
+		await db();
+
+		const skip = (page - 1) * pageSize;
+		const totalQueries = await Query.countDocuments({ email });
+
+		const queries = await Query.find({ email })
+			.skip(skip)
+			.limit(pageSize)
+			.sort({ createAt: -1 });
+
+		return {
+			queries,
+			totalPages: Math.ceil(totalQueries / pageSize),
+		};
+	} catch (err) {
+		return {
+			ok: false,
+		};
+	}
 }
